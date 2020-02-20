@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VirtualDisplayUnityPlugin</string>
+    <string name="external_display">External Display</string>
 </resources>
