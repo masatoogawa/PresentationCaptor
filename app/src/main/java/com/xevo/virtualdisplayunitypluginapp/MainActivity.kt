@@ -1,18 +1,28 @@
 package com.xevo.virtualdisplayunitypluginapp
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.xevo.virtualdisplayunityplugin.BoxedByteArrayForCSharp
 import com.xevo.virtualdisplayunityplugin.VirtualDisplayPlugin
-import com.xevo.virtualdisplayunityplugin.listener
+import com.xevo.virtualdisplayunityplugin.Listener
 
 import kotlinx.android.synthetic.main.activity_main.*
+import java.nio.ByteBuffer
 
-class MainActivity : AppCompatActivity(), listener {
+class MainActivity : AppCompatActivity(), Listener {
     override fun onRendered(bitmap: BoxedByteArrayForCSharp) {
+        Log.d("MO", "onRendered")
+        val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
+        bytebuffer.put(bitmap.byteArray,0, bitmap.byteArray.size)
+        bytebuffer.rewind()
+        val bmp = Bitmap.createBitmap(800, 480, Bitmap.Config.ARGB_8888)
+        bmp.copyPixelsFromBuffer(bytebuffer)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +35,7 @@ class MainActivity : AppCompatActivity(), listener {
                 .setAction("Action", null).show()
         }
         val v = VirtualDisplayPlugin()
-        v.startRender(this, 1, this)
+        v.startRender(this, 800, 480, 1, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
