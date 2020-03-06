@@ -8,6 +8,7 @@ import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
 import android.media.Image
 import android.media.ImageReader
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Display
@@ -18,6 +19,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.VideoView
+import androidx.annotation.RequiresApi
 import java.nio.ByteBuffer
 import kotlin.concurrent.timer
 import com.unity3d.player.UnityPlayer
@@ -48,6 +50,7 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
     private lateinit var imageReader: ImageReader
     //private var url = "https://google.com/"
     private var url = "https://www.youtube.com/watch?v=GSeRKL895WA"
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun startRender(width: Int, height: Int, fps: Long, listener: Listener) {
         startRender(UnityPlayer.currentActivity, width, height, fps, listener)
     }
@@ -77,7 +80,7 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
 
         displayManager.createVirtualDisplay("DisplayManagerVirtualDisplay",
             this.width, this.height, metrics.densityDpi, imageReader.surface,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION, null, null)
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION)
     }
 
     override fun onDisplayChanged(displayId: Int) {
@@ -137,9 +140,9 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
             //textView.startAnimation(rotation)
             webView.settings.javaScriptEnabled = true
             //webView.settings.setAppCacheEnabled(true)
-            webView.webChromeClient = test()
+            //webView.webChromeClient = test()
             //webView.webChromeClient = WebChromeClient()
-            webView.webViewClient = WebViewClient()
+            //webView.webViewClient = WebViewClient()
 
             webView.loadUrl(url)
 

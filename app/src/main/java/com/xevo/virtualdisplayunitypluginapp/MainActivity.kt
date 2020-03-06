@@ -1,27 +1,44 @@
 package com.xevo.virtualdisplayunitypluginapp
 
 import android.graphics.Bitmap
+import android.graphics.Paint
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import com.xevo.virtualdisplayunityplugin.BoxedByteArrayForCSharp
 import com.xevo.virtualdisplayunityplugin.VirtualDisplayPlugin
 import com.xevo.virtualdisplayunityplugin.Listener
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity(), Listener {
+    private var isSurfaceCreated = false
+    private var width = 0
+    private var height = 0
     override fun onRendered(bitmap: BoxedByteArrayForCSharp) {
         Log.d("MO", "onRendered")
         val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
         bytebuffer.put(bitmap.byteArray,0, bitmap.byteArray.size)
         bytebuffer.rewind()
-        val bmp = Bitmap.createBitmap(800, 480, Bitmap.Config.ARGB_8888)
+        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        //val bmp = Bitmap.createBitmap(800, 480, Bitmap.Config.ARGB_8888)
         bmp.copyPixelsFromBuffer(bytebuffer)
+
+        if (isSurfaceCreated) {
+            val canvas = surfaceView.holder.lockCanvas()
+            val left: Float = 0f
+            val top: Float = 0f
+            canvas.drawBitmap(bmp, left, top, null)
+            surfaceView.holder.unlockCanvasAndPost(canvas)
+        }
 
     }
 
@@ -34,8 +51,36 @@ class MainActivity : AppCompatActivity(), Listener {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-        val v = VirtualDisplayPlugin()
-        v.startRender(this, 800, 480, 1, this)
+
+        surfaceView.setOnTouchListener { v, event ->
+            Log.d("mogawa", "touch")
+            true
+        }
+        surfaceView.holder.addCallback(object: SurfaceHolder.Callback {
+            override fun surfaceChanged(
+                holder: SurfaceHolder?,
+                format: Int,
+                _width: Int,
+                _height: Int
+            ) {
+                MainActivity@isSurfaceCreated = true
+                MainActivity@width = _width
+                MainActivity@height = _height
+                Log.d("mogawa", "surfaceChanged w:$width, h:$height")
+                val v = VirtualDisplayPlugin()
+                v.startRender(this@MainActivity, width, height, 15, this@MainActivity)
+            }
+
+            override fun surfaceCreated(holder: SurfaceHolder?) {
+                Log.d("mogawa", "surfaceCreated")
+            }
+
+            override fun surfaceDestroyed(holder: SurfaceHolder?) {
+                Log.d("mogawa", "surfaceDestroyed")
+            }
+        })
+        //val v = VirtualDisplayPlugin()
+        //v.startRender(MainActivity@this, 800, 480, 15, MainActivity@this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
