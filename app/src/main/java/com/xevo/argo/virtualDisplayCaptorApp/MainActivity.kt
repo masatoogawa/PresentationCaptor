@@ -1,4 +1,4 @@
-package com.xevo.virtualDisplayCaptorApp
+package com.xevo.argo.virtualDisplayCaptorApp
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SurfaceHolder
-import com.xevo.virtualDisplayCaptor.BoxedByteArrayForCSharp
-import com.xevo.virtualDisplayCaptor.VirtualDisplayCaptor
-import com.xevo.virtualDisplayCaptor.Listener
+import com.xevo.argo.virtualDisplayCaptor.BoxedByteArrayForCSharp
+import com.xevo.argo.virtualDisplayCaptor.VirtualDisplayCaptor
+import com.xevo.argo.virtualDisplayCaptor.Listener
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*

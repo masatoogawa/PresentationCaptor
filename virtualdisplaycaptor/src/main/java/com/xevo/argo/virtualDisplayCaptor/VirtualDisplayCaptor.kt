@@ -1,4 +1,4 @@
-package com.xevo.virtualDisplayCaptor
+package com.xevo.argo.virtualDisplayCaptor
 
 import android.app.Activity
 import android.app.ActivityOptions

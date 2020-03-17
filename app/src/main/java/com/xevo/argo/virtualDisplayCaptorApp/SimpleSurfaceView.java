@@ -1,4 +1,4 @@
-package com.xevo.virtualDisplayCaptorApp;
+package com.xevo.argo.virtualDisplayCaptorApp;
 
 import android.content.Context;
 import android.opengl.GLES20;
