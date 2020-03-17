@@ -1,18 +1,23 @@
 package com.xevo.virtualdisplayunityplugin
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.Presentation
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
 import android.media.Image
 import android.media.ImageReader
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.view.Display
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.webkit.WebChromeClient
@@ -20,6 +25,7 @@ import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.VideoView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import java.nio.ByteBuffer
 import kotlin.concurrent.timer
 import com.unity3d.player.UnityPlayer
@@ -59,7 +65,6 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
         this.url = url
     }
 
-
     fun startRender(activity: Activity, width: Int, height: Int, fps: Long, listener: Listener) {
         this.activity = activity
         this.width = width
@@ -83,10 +88,23 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
             DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION)
     }
 
+    private inline fun <reified T> launchActivity(context: Context, displayId: Int) {
+        context.startActivity(
+            Intent(context, T::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            },
+            ActivityOptions.makeBasic().apply {
+                launchDisplayId = displayId
+            }.toBundle())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onDisplayChanged(displayId: Int) {
         if (this.displayId == displayId && mainPresentation == null) {
             mainPresentation = MainPresentation(activity, displayManager.getDisplay(this.displayId))
-            mainPresentation?.show()
+            //mainPresentation?.show()
+
+            launchActivity<TestActivity>(activity, displayId)
 
             timer(period = 1000 / this.fps) {
                 val image: Image? = imageReader.acquireLatestImage()
@@ -117,20 +135,6 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
     override fun onDisplayRemoved(displayId: Int) {
     }
 
-    inner class test : WebChromeClient() {
-
-        override fun onShowCustomView(view: View?, callback: CustomViewCallback?) {
-            super.onShowCustomView(view, callback)
-
-            if (view is FrameLayout) {
-                val frame = view as FrameLayout
-                if (frame.focusedChild is VideoView) {
-                    val vv = frame.focusedChild
-                }
-            }
-        }
-
-    }
     inner class MainPresentation(context: Context, display: Display) : Presentation(context, display) {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -139,17 +143,14 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
             //val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotator)
             //textView.startAnimation(rotation)
             webView.settings.javaScriptEnabled = true
-            //webView.settings.setAppCacheEnabled(true)
-            //webView.webChromeClient = test()
-            //webView.webChromeClient = WebChromeClient()
-            //webView.webViewClient = WebViewClient()
-
             webView.loadUrl(url)
+        }
+    }
 
-            //webView.loadUrl("https://example.com/")
-            //webView.loadUrl("https://google.com/")
-            //webView.loadUrl("https://www.lear.com/")
-
+    class TestActivity: AppCompatActivity() {
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.presentation_main)
         }
     }
 }
