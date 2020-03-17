@@ -1,4 +1,4 @@
-package com.xevo.virtualdisplayunityplugin
+package com.xevo.virtualDisplayCaptorApp
 
 import org.junit.Test
 

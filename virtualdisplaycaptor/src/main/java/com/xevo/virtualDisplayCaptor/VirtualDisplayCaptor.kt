@@ -1,4 +1,4 @@
-package com.xevo.virtualdisplayunityplugin
+package com.xevo.virtualDisplayCaptor
 
 import android.app.Activity
 import android.app.ActivityOptions
@@ -10,26 +10,16 @@ import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
 import android.media.Image
 import android.media.ImageReader
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.DisplayMetrics
 import android.view.Display
-import android.view.View
-import android.view.Window
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
-import android.webkit.WebChromeClient
-import android.webkit.WebViewClient
-import android.widget.FrameLayout
-import android.widget.VideoView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.nio.ByteBuffer
 import kotlin.concurrent.timer
 import com.unity3d.player.UnityPlayer
-import kotlinx.android.synthetic.main.presentation_main.*
 import kotlinx.android.synthetic.main.presentation_webview.*
 
 const val TAG = "VDP"
@@ -42,7 +32,7 @@ interface Listener {
     fun onRendered(bitmap: BoxedByteArrayForCSharp)
 }
 
-class VirtualDisplayPlugin : DisplayManager.DisplayListener {
+class VirtualDisplayCaptor : DisplayManager.DisplayListener {
     // User Settings
     private lateinit var activity: Activity
     private var width = 0
@@ -120,7 +110,11 @@ class VirtualDisplayPlugin : DisplayManager.DisplayListener {
                         val croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height)
                         val byteBuffer = ByteBuffer.allocate(pixelStride * width * height)
                         croppedBitmap.copyPixelsToBuffer(byteBuffer)
-                        listener.onRendered(BoxedByteArrayForCSharp(byteBuffer.array()))
+                        listener.onRendered(
+                            BoxedByteArrayForCSharp(
+                                byteBuffer.array()
+                            )
+                        )
                     }
                     it.close()
                 }

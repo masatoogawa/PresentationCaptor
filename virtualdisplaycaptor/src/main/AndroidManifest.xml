@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xevo.virtualdisplayunityplugin">
+    package="com.xevo.virtualDisplayCaptor">
 <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
         <activity
-            android:name=".VirtualDisplayPlugin$TestActivity"
+            android:name="com.xevo.virtualDisplayCaptor.VirtualDisplayCaptor$TestActivity"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="false"
             android:label="@string/app_name">

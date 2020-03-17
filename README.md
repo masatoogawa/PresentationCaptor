@@ -16,7 +16,7 @@ Capture image of Android Presentation or Activity that is rendered on off-screen
 |          | Class                                                        |
 | -------- | ------------------------------------------------------------ |
 | abstract | Callback<br /><br />Interface for receiving bitmap which is rendered on off screen. |
-|          | BoxedByteArray<br /><br />バイト配列を渡すためのclass        |
+|          | BoxedByteArray<br />v<br />バイト配列を渡すためのclass       |
 
 #### Public methods
 

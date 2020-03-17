@@ -1,4 +1,4 @@
-package com.xevo.virtualdisplayunityplugin
+package com.xevo.virtualDisplayCaptor
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.xevo.virtualdisplayunitypluginapp
+package com.xevo.virtualDisplayCaptorApp
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SurfaceHolder
-import com.xevo.virtualdisplayunityplugin.BoxedByteArrayForCSharp
-import com.xevo.virtualdisplayunityplugin.VirtualDisplayPlugin
-import com.xevo.virtualdisplayunityplugin.Listener
+import com.xevo.virtualDisplayCaptor.BoxedByteArrayForCSharp
+import com.xevo.virtualDisplayCaptor.VirtualDisplayCaptor
+import com.xevo.virtualDisplayCaptor.Listener
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), Listener {
                 MainActivity@width = _width
                 MainActivity@height = _height
                 Log.d("mogawa", "surfaceChanged w:$width, h:$height")
-                val v = VirtualDisplayPlugin()
+                val v = VirtualDisplayCaptor()
                 v.startRender(this@MainActivity, width, height, 30, this@MainActivity)
             }
 
