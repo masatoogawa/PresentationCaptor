@@ -13,7 +13,9 @@ import android.media.ImageReader
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Display
+import android.view.MotionEvent
 import android.view.WindowManager
+import com.xevo.argo.webview.WebViewActivity
 import java.nio.ByteBuffer
 import kotlin.concurrent.timer
 
@@ -144,5 +146,10 @@ class VirtualDisplayCaptor(var context: Context) {
             this.width, this.height, metrics.densityDpi, imageReader.surface,
             DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION)
         return this
+    }
+
+    fun inject(ev: MotionEvent) {
+        presentation?.dispatchTouchEvent(ev)
+        WebViewActivity.activity?.get()?.dispatchTouchEvent(ev)
     }
 }

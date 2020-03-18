@@ -31,7 +31,7 @@ Capture image of Android Presentation or Activity that is rendered on off-screen
 | void   | \<reified T: Presentation> invoke(_callback: VirtualDisplayCaptor.Callback, initBlock: T.() -> Unit)<br /><br />Starts to render a virtual display and passes bitmap through the callback. virtual display を作り、そこで指定された Presentation を instantiate する。fps の間隔で display から bitmap を取得して callback する。 |
 | void   | \<reified T: Activity> invoke(_callback: VirtualDisplayCaptor.Callback, intent: Intent)<br /><br />Starts to render a virtual display and passes bitmap through the callback. |
 | void   | inject(touch: MotionEvent)<br /><br />Notify the presentation or activity of touch events. |
-| void   | exit(presentation: Presentation)<br /><br />Finish capture and execution of presentation. |
+| void   | exit()<br /><br />Finish capture and execution of presentation. |
 
 ### public inteface Callback
 

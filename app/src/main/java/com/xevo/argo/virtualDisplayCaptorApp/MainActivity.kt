@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var isSurfaceCreated = false
     private var width = 0
     private var height = 0
+    private var vdc: VirtualDisplayCaptor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         surfaceView.setOnTouchListener { v, event ->
             Log.d("mogawa", "touch $event")
+            vdc?.inject(event)
             true
         }
 
@@ -47,38 +49,15 @@ class MainActivity : AppCompatActivity() {
                 width = _width
                 height = _height
 
-                val bundle = Bundle()
-                bundle.putString("url", "https://www.xevo.com/")
-
-                VirtualDisplayCaptor(this@MainActivity).apply {
-                    fps = 30
-                    width = this@MainActivity.width
-                    height = this@MainActivity.height
-                }.invoke<WebViewActivity>(object : VirtualDisplayCaptor.Callback {
-                    override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
-                        Log.d("MO", "onRendered")
-                        val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
-                        bytebuffer.put(bitmap.byteArray,0, bitmap.byteArray.size)
-                        bytebuffer.rewind()
-                        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                        bmp.copyPixelsFromBuffer(bytebuffer)
-
-                        if (isSurfaceCreated) {
-                            val canvas = surfaceView.holder.lockCanvas()
-                            val left: Float = 0f
-                            val top: Float = 0f
-                            canvas.drawBitmap(bmp, left, top, null)
-                            surfaceView.holder.unlockCanvasAndPost(canvas)
-                        }
-                    }
-                }, bundle)
-
+//                val bundle = Bundle()
+//                //bundle.putString("url", "https://www.xevo.com/")
+//                bundle.putString("url", "https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja")
 //
-//                VirtualDisplayCaptor(this@MainActivity).apply {
+//                vdc = VirtualDisplayCaptor(this@MainActivity).apply {
 //                    fps = 30
 //                    width = this@MainActivity.width
 //                    height = this@MainActivity.height
-//                }.invoke<WebViewPresentation>(object : VirtualDisplayCaptor.Callback {
+//                }.invoke<WebViewActivity>(object : VirtualDisplayCaptor.Callback {
 //                    override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
 //                        Log.d("MO", "onRendered")
 //                        val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
@@ -95,10 +74,34 @@ class MainActivity : AppCompatActivity() {
 //                            surfaceView.holder.unlockCanvasAndPost(canvas)
 //                        }
 //                    }
-//                }) {
-//                    //url = "https://www.youtube.com"
-//                    url = "https://www.youtube.com/watch?v=GSeRKL895WA"
-//                }
+//                }, bundle)
+
+                vdc = VirtualDisplayCaptor(this@MainActivity).apply {
+                    fps = 30
+                    width = this@MainActivity.width
+                    height = this@MainActivity.height
+                }.invoke<WebViewPresentation>(object : VirtualDisplayCaptor.Callback {
+                    override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
+                        Log.d("MO", "onRendered")
+                        val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
+                        bytebuffer.put(bitmap.byteArray,0, bitmap.byteArray.size)
+                        bytebuffer.rewind()
+                        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        bmp.copyPixelsFromBuffer(bytebuffer)
+
+                        if (isSurfaceCreated) {
+                            val canvas = surfaceView.holder.lockCanvas()
+                            val left: Float = 0f
+                            val top: Float = 0f
+                            canvas.drawBitmap(bmp, left, top, null)
+                            surfaceView.holder.unlockCanvasAndPost(canvas)
+                        }
+                    }
+                }) {
+                    //url = "https://www.youtube.com"
+                    url = "https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja"
+                    //url = "https://www.youtube.com/watch?v=GSeRKL895WA"
+                }
             }
 
             override fun surfaceCreated(holder: SurfaceHolder?) {
