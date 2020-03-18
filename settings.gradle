@@ -1,2 +1,2 @@
-include ':app', ':virtualdisplaycaptor'
-rootProject.name='VirtualDisplayUnityPluginApp'
+include ':app', ':virtualdisplaycaptor', ':contents'
+rootProject.name='VirtualDisplayCaptor'
