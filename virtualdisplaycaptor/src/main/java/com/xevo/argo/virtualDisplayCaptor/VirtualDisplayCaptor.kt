@@ -22,11 +22,7 @@ import kotlin.concurrent.timer
 class VirtualDisplayCaptor(var context: Context) {
 
     interface Callback {
-        fun onCaptured(bitmap: BoxedByteArray)
-    }
-
-    class BoxedByteArray(ba: ByteArray) {
-        val byteArray = ba
+        fun onCaptured(bitmap: ByteArray)
     }
 
     var presentation: Presentation? = null
@@ -73,7 +69,7 @@ class VirtualDisplayCaptor(var context: Context) {
                                 val byteBuffer = ByteBuffer.allocate(pixelStride * width * height)
                                 croppedBitmap.copyPixelsToBuffer(byteBuffer)
                                 callback.onCaptured(
-                                    BoxedByteArray(byteBuffer.array())
+                                    byteBuffer.array()
                                 )
                             }
                             it.close()
@@ -126,7 +122,7 @@ class VirtualDisplayCaptor(var context: Context) {
                                 val byteBuffer = ByteBuffer.allocate(pixelStride * width * height)
                                 croppedBitmap.copyPixelsToBuffer(byteBuffer)
                                 callback.onCaptured(
-                                    BoxedByteArray(byteBuffer.array())
+                                    byteBuffer.array()
                                 )
                             }
                             it.close()

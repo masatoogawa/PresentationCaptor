@@ -83,19 +83,17 @@ class MainActivity : AppCompatActivity() {
                         width = this@MainActivity.width
                         height = this@MainActivity.height
                     }.invoke<WebViewPresentation>(object : VirtualDisplayCaptor.Callback {
-                        override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
+                        override fun onCaptured(bitmap: ByteArray) {
                             Log.d("MO", "onRendered")
-                            val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
-                            bytebuffer.put(bitmap.byteArray, 0, bitmap.byteArray.size)
+                            val bytebuffer = ByteBuffer.allocate(bitmap.size)
+                            bytebuffer.put(bitmap, 0, bitmap.size)
                             bytebuffer.rewind()
                             val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                             bmp.copyPixelsFromBuffer(bytebuffer)
 
                             if (isSurfaceCreated) {
                                 val canvas = surfaceView.holder.lockCanvas()
-                                val left: Float = 0f
-                                val top: Float = 0f
-                                canvas.drawBitmap(bmp, left, top, null)
+                                canvas.drawBitmap(bmp, 0.0f, 0.0f, null)
                                 surfaceView.holder.unlockCanvasAndPost(canvas)
                             }
                         }

@@ -8,8 +8,12 @@ import com.xevo.argo.webview.WebViewPresentation
 
 class WebView {
 
+    class BoxedByteArray(ba: ByteArray) {
+        val byteArray = ba
+    }
+
     interface Callback {
-        fun onRendered(bitmap: VirtualDisplayCaptor.BoxedByteArray)
+        fun onCaptured(bitmap: BoxedByteArray)
     }
 
     var url: String? = null
@@ -21,9 +25,8 @@ class WebView {
             this.width = width
             this.height = height
         }.invoke<WebViewPresentation>(object : VirtualDisplayCaptor.Callback {
-            override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
-                Log.d("MO", "onRendered")
-                callback.onRendered(bitmap)
+            override fun onCaptured(bitmap: ByteArray) {
+                callback.onCaptured(BoxedByteArray(bitmap))
             }
         }) {
             url = this@WebView.url
