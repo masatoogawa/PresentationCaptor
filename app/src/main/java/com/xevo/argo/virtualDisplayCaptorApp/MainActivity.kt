@@ -2,6 +2,7 @@ package com.xevo.argo.virtualDisplayCaptorApp
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.SurfaceHolder
 import com.xevo.argo.virtualDisplayCaptor.VirtualDisplayCaptor
+import com.xevo.argo.webview.RotatingTrianglePresentation
 import com.xevo.argo.webview.WebViewActivity
 import com.xevo.argo.webview.WebViewPresentation
 
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                         fps = 30
                         width = this@MainActivity.width
                         height = this@MainActivity.height
-                    }.invoke<WebViewPresentation>(object : VirtualDisplayCaptor.Callback {
+                    }.invoke<RotatingTrianglePresentation>(object : VirtualDisplayCaptor.Callback {
                         override fun onCaptured(bitmap: ByteArray) {
                             Log.d("MO", "onRendered")
                             val bytebuffer = ByteBuffer.allocate(bitmap.size)
@@ -99,7 +101,8 @@ class MainActivity : AppCompatActivity() {
                         }
                     }) {
                         //url = "https://www.youtube.com"
-                        url = "https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja"
+                        //url = "https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja"
+                        //url = "https://www.google.co.jp"
                         //url = "https://www.youtube.com/watch?v=GSeRKL895WA"
                     }
                 }

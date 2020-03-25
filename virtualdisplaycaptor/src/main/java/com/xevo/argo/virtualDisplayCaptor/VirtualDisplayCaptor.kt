@@ -13,6 +13,7 @@ import android.media.ImageReader
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Display
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.WindowManager
 import com.xevo.argo.webview.WebViewActivity
@@ -146,6 +147,5 @@ class VirtualDisplayCaptor(var context: Context) {
 
     fun inject(ev: MotionEvent) {
         presentation?.dispatchTouchEvent(ev)
-        WebViewActivity.activity?.get()?.dispatchTouchEvent(ev)
     }
 }

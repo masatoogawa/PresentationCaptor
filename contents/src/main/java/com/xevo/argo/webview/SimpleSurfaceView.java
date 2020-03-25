@@ -1,4 +1,4 @@
-package com.xevo.argo.virtualDisplayCaptorApp;
+package com.xevo.argo.webview;
 
 import android.content.Context;
 import android.opengl.GLES20;

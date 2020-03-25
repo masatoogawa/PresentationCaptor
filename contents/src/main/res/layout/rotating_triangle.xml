@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <com.xevo.argo.webview.SimpleSurfaceView
+        android:id="@+id/simplesurfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.xevo.argo.webview.ReticleView
+        android:id="@+id/reticleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

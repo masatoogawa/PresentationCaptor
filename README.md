@@ -107,4 +107,3 @@ kotlin.Any
 | void   | onCaptured(bitmap: ByteArray) |
 
 
-
