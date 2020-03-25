@@ -55,7 +55,7 @@ VirtualDisplayCaptor has a easy to use class for calling from Unity (WebView Onl
 
 ## Reference
 
-### public class VirtualDisplayCaptor
+### class VirtualDisplayCaptor
 
 ```
 kotlin.Any
@@ -66,17 +66,17 @@ Capture image of Android Presentation or Activity that is rendered on off-screen
 
 #### Nested classes
 
-|          | Class                                                        |
-| -------- | ------------------------------------------------------------ |
-| abstract | Callback<br /><br />Interface for receiving bitmap which is rendered on off screen. |
+|           | Class                                                        |
+| --------- | ------------------------------------------------------------ |
+| interface | Callback<br /><br />Interface for receiving bitmap which is rendered on off screen. |
 
-#### Public constructors
+#### Constructors
 
 | Constructors                           |      |
 | -------------------------------------- | ---- |
 | VirtualDisplayCaptor(context: Context) |      |
 
-#### Public methods
+#### Methods
 
 | Return | Method                                                       |
 | ------ | :----------------------------------------------------------- |
@@ -85,7 +85,7 @@ Capture image of Android Presentation or Activity that is rendered on off-screen
 | void   | inject(touch: MotionEvent)<br /><br />Notify the presentation/activity of touch events. |
 | void   | exit()<br /><br />Finish capture and execution of presentation/activity.<br/>[NOTE]: Not implemented so far. |
 
-#### Public properties 
+#### Properties 
 
 | Type | Property                                      |
 | ---- | --------------------------------------------- |
@@ -93,17 +93,80 @@ Capture image of Android Presentation or Activity that is rendered on off-screen
 | Int  | height<br/><br/>Height of the virtual display |
 | Long | fps<br/><br/>Frame rate for screen capture    |
 
-### Public inteface Callback
+### inteface VirtualDisplayCaptor.Callback
 
 ```
 kotlin.Any
  `- com.xevo.argo.virtualDisplayCaptor.VirtualDisplayCaptor.Callback
 ```
 
-#### Public Methods
+#### Methods
 
 | Return | Method                        |
 | ------ | ----------------------------- |
 | void   | onCaptured(bitmap: ByteArray) |
+
+## Reference for Unity
+
+These classes are various Android-Native Views for Unity.
+
+### class NativeView
+
+```
+kotlin.Any
+ `- com.xevo.argo.virtualDisplayCaptor.unity.NativeView
+```
+
+#### Nested classes
+
+| Type      | Class                                                        |
+| --------- | ------------------------------------------------------------ |
+| interface | Callback<br/>Interface for receiving bitmap which is rendered on off screen. |
+| enum      | TouchAction<br/>Types of touch action.                       |
+| class     | BoxedByteArray<br/>Wrapping `ByteArray` with class for handling byte data in Unity |
+
+#### Methods
+
+| Return | Method                                                       |
+| ------ | ------------------------------------------------------------ |
+| void   | \<reified T: Presentation> invoke(_width: Int, _height: Int, _fps: Long, _callback: Callback, crossinline _initBlock: T.() -> Unit) |
+| void   | injectTouch(_id: Int, touchAction: TouchAction, _x: Float, _y: Float) |
+
+### class WebView
+
+```
+kotlin.Any
+ `- com.xevo.argo.virtualDisplayCaptor.unity.NativeView
+     `- com.xevo.argo.virtualDisplayCaptor.unity.WebView
+```
+
+WebView for Unity
+
+#### Methods
+
+| Return | Method                                                       |
+| ------ | ------------------------------------------------------------ |
+| void   | invoke(width: Int, height: Int, fps: Long, callback: NativeView.Callback) |
+
+#### Properties
+
+| Type   | Property |
+| ------ | -------- |
+| String | url      |
+
+### class RotatingTriangleView
+
+```
+kotlin.Any
+ `- com.xevo.argo.virtualDisplayCaptor.unity.NativeView
+     `- com.xevo.argo.virtualDisplayCaptor.unity.RotatingTriangleView
+```
+
+#### Methods
+
+| Return | Method                                                       |
+| ------ | ------------------------------------------------------------ |
+| void   | invoke(width: Int, height: Int, fps: Long, callback: NativeView.Callback) |
+
 
 

@@ -10,7 +10,7 @@ import com.xevo.argo.virtualDisplayCaptor.VirtualDisplayCaptor
 open class NativeView {
 
     lateinit var vdc: VirtualDisplayCaptor
-    open class BoxedByteArray(ba: ByteArray) {
+    class BoxedByteArray(ba: ByteArray) {
         val byteArray = ba
     }
 
