@@ -1,18 +1,19 @@
 package com.xevo.argo.virtualDisplayCaptorApp
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SurfaceHolder
+import android.widget.Toast
 import com.xevo.argo.virtualDisplayCaptor.VirtualDisplayCaptor
-import com.xevo.argo.webview.RotatingTrianglePresentation
-import com.xevo.argo.webview.WebViewActivity
-import com.xevo.argo.webview.WebViewPresentation
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -50,41 +51,36 @@ class MainActivity : AppCompatActivity() {
                 isSurfaceCreated = true
                 width = _width
                 height = _height
+                requestScreenCapturePermission()
+            }
 
+            override fun surfaceCreated(holder: SurfaceHolder?) {
+                Log.d("mogawa", "surfaceCreated")
+            }
 
-//                if (vdc == null) {
-//                    vdc = VirtualDisplayCaptor(this@MainActivity).apply {
-//                        fps = 30
-//                        width = this@MainActivity.width
-//                        height = this@MainActivity.height
-//                    }.invoke<WebViewActivity>(object : VirtualDisplayCaptor.Callback {
-//                        override fun onCaptured(bitmap: VirtualDisplayCaptor.BoxedByteArray) {
-//                            Log.d("MO", "onRendered")
-//                            val bytebuffer = ByteBuffer.allocate(bitmap.byteArray.size)
-//                            bytebuffer.put(bitmap.byteArray, 0, bitmap.byteArray.size)
-//                            bytebuffer.rewind()
-//                            val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-//                            bmp.copyPixelsFromBuffer(bytebuffer)
-//
-//                            if (isSurfaceCreated) {
-//                                val canvas = surfaceView.holder.lockCanvas()
-//                                val left: Float = 0f
-//                                val top: Float = 0f
-//                                canvas.drawBitmap(bmp, left, top, null)
-//                                surfaceView.holder.unlockCanvasAndPost(canvas)
-//                            }
-//                        }
-//                    }, Bundle().apply {
-//                        putString("url","https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja")
-//                    })
-//                }
+            override fun surfaceDestroyed(holder: SurfaceHolder?) {
+                Log.d("mogawa", "surfaceDestroyed")
+            }
+        })
 
-                if (vdc == null) {
+    }
+
+    private fun requestScreenCapturePermission() {
+        val mediaProjectionManager: MediaProjectionManager =
+            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intentForMediaProjection: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intentForMediaProjection)
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                intentForMediaProjection?.let {
                     vdc = VirtualDisplayCaptor(this@MainActivity).apply {
                         fps = 30
                         width = this@MainActivity.width
                         height = this@MainActivity.height
-                    }.invoke<RotatingTrianglePresentation>(object : VirtualDisplayCaptor.Callback {
+                    }.screenCapture(it, object: VirtualDisplayCaptor.Callback {
                         override fun onCaptured(bitmap: ByteArray) {
                             Log.d("MO", "onRendered")
                             val bytebuffer = ByteBuffer.allocate(bitmap.size)
@@ -99,24 +95,12 @@ class MainActivity : AppCompatActivity() {
                                 surfaceView.holder.unlockCanvasAndPost(canvas)
                             }
                         }
-                    }) {
-                        //url = "https://www.youtube.com"
-                        //url = "https://www.google.co.jp/maps/@35.6648223,139.5993176,15z?hl=ja"
-                        //url = "https://www.google.co.jp"
-                        //url = "https://www.youtube.com/watch?v=GSeRKL895WA"
-                    }
+                    })
+                    return
                 }
             }
-
-            override fun surfaceCreated(holder: SurfaceHolder?) {
-                Log.d("mogawa", "surfaceCreated")
-            }
-
-            override fun surfaceDestroyed(holder: SurfaceHolder?) {
-                Log.d("mogawa", "surfaceDestroyed")
-            }
-        })
-
+        }
+        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

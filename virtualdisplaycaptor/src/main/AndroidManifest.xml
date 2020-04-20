@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xevo.argo.virtualDisplayCaptor"/>
+    package="com.xevo.argo.virtualDisplayCaptor">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <application>
+        <service android:name=".ScreenCaptorService" android:foregroundServiceType="mediaProjection"/>
+    </application>
+</manifest>

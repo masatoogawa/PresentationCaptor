@@ -3,6 +3,7 @@ package com.xevo.argo.virtualDisplayCaptor
 import android.app.Activity
 import android.app.ActivityOptions
 import android.app.Presentation
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -12,6 +13,7 @@ import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Display
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -34,6 +36,10 @@ class VirtualDisplayCaptor(var context: Context) {
     var displayId = 0
     lateinit var callback: Callback
     lateinit var imageReader: ImageReader
+    var screenCaptor: ScreenCaptor = ScreenCaptor(context).apply {
+//        width = this@VirtualDisplayCaptor.width
+//        height = this@VirtualDisplayCaptor.height
+    }
 
     inline fun <reified T: Activity> invoke(_callback: Callback, bundle: Bundle) : VirtualDisplayCaptor {
         callback = _callback
@@ -142,6 +148,18 @@ class VirtualDisplayCaptor(var context: Context) {
         displayManager.createVirtualDisplay("DisplayManagerVirtualDisplay",
             this.width, this.height, metrics.densityDpi, imageReader.surface,
             DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION)
+        return this
+    }
+
+    fun screenCapture(intentForMediaProjection: Intent, _callback: Callback) : VirtualDisplayCaptor {
+        screenCaptor.width = width
+        screenCaptor.height = height
+        screenCaptor.fps = fps
+        screenCaptor.invoke(intentForMediaProjection, object: ScreenCaptor.Callback {
+            override fun onCaptured(bitmap: ByteArray) {
+                _callback.onCaptured(bitmap)
+            }
+        })
         return this
     }
 
