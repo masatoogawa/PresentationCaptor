@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.hardware.display.VirtualDisplay
 import android.os.IBinder
 
 class ScreenCaptor(_context: Context) {
@@ -32,6 +33,7 @@ class ScreenCaptor(_context: Context) {
                 override fun onServiceConnected(name: ComponentName?, _service: IBinder?) {
                     (_service as ScreenCaptorService.Service).let {
                         it.callback = callback
+                        service = _service
                     }
                 }
 
@@ -42,7 +44,9 @@ class ScreenCaptor(_context: Context) {
             }, Service.BIND_AUTO_CREATE)
 
         }
+    }
 
-
+    fun resize(width: Int, height: Int, dpi: Int) {
+        service?.resize(width, height, dpi)
     }
 }

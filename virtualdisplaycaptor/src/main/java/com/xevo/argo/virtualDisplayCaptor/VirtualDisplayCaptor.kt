@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
+import android.hardware.display.VirtualDisplay
 import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
@@ -161,6 +162,14 @@ class VirtualDisplayCaptor(var context: Context) {
             }
         })
         return this
+    }
+
+    fun resizeScreenCaptor(width: Int, height: Int) {
+        val metrics = DisplayMetrics()
+        val windowManager =
+            context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(metrics)
+        screenCaptor.resize(width, height, metrics.densityDpi)
     }
 
     fun inject(ev: MotionEvent) {
