@@ -10,8 +10,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.util.Log
 import android.util.Rational
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.Surface

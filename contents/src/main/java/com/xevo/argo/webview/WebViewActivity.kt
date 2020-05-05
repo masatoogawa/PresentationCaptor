@@ -2,7 +2,7 @@ package com.xevo.argo.webview
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content.*
 import java.lang.ref.WeakReference
 

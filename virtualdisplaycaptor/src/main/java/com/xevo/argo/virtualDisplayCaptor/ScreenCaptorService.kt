@@ -16,8 +16,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.view.Display
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
+import android.support.annotation.RequiresApi
+import android.support.v4.app.NotificationCompat
 import kotlinx.coroutines.*
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
